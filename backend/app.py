@@ -33,7 +33,6 @@ def init_db():
 def hash_pwd(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
-# ---------- 静态资源 ----------
 @app.route('/frontend/<path:filename>')
 def serve_frontend(filename):
     return send_from_directory(FRONTEND_DIR, filename)
@@ -42,7 +41,6 @@ def serve_frontend(filename):
 def index():
     return send_from_directory(FRONTEND_DIR, 'contacts.html')
 
-# ---------- 用户 ----------
 @app.post('/register')
 def register():
     data = request.json
@@ -75,7 +73,6 @@ def login():
     else:
         return jsonify(error='Invalid username or password'), 401
 
-# ---------- 联系人 ----------
 @app.post('/contacts')
 def add_contact():
     data = request.json
@@ -104,7 +101,6 @@ def get_contacts(user_id):
     except Exception as e:
         return jsonify(error=f'Failed to get contacts: {str(e)}'), 500
 
-# ★ 新增：修改联系人
 @app.put('/contacts/<int:contact_id>')
 def update_contact(contact_id):
     data = request.json
@@ -140,7 +136,7 @@ def count_contacts(user_id):
     except Exception as e:
         return jsonify(error=f'Failed to count contacts: {str(e)}'), 500
 
-# ---------- 启动 ----------
 if __name__ == '__main__':
     init_db()
+
     app.run(debug=True, port=5500)
